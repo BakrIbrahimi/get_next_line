@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dpoveda- <me@izenynn.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/21 11:50:38 by dpoveda-          #+#    #+#             */
-/*   Updated: 2021/09/23 20:16:57 by dpoveda-         ###   ########.fr       */
+/*   Created: 2021/09/23 20:11:09 by dpoveda-          #+#    #+#             */
+/*   Updated: 2021/09/23 20:59:06 by dpoveda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*return_next_line(char **s)
 {
@@ -41,20 +41,20 @@ static char	*return_next_line(char **s)
 	return (out);
 }
 
-static char	*check_and_return(char **s, ssize_t n)
+static char	*check_and_return(char **s, ssize_t n, int fd)
 {
 	if (n < 0)
 		return (NULL);
-	if (!n && (!s || !*s))
+	if (!n && (!s[fd] || !*s[fd]))
 		return (NULL);
-	return (return_next_line(s));
+	return (return_next_line(&s[fd]));
 }
 
 char	*get_next_line(int fd)
 {
 	char		*tmp;
 	char		*buf;
-	static char	*s;
+	static char	*s[FD_SIZE];
 	ssize_t		n;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -66,15 +66,15 @@ char	*get_next_line(int fd)
 	while (n > 0)
 	{
 		buf[n] = '\0';
-		if (!s)
-			s = ft_strdup("");
-		tmp = ft_strjoin(s, buf);
-		free(s);
-		s = tmp;
+		if (!s[fd])
+			s[fd] = ft_strdup("");
+		tmp = ft_strjoin(s[fd], buf);
+		free(s[fd]);
+		s[fd] = tmp;
 		if (ft_strchr(buf, '\n'))
 			break ;
 		n = read(fd, buf, BUFFER_SIZE);
 	}
 	free(buf);
-	return (check_and_return(&s, n));
+	return (check_and_return(s, n, fd));
 }
