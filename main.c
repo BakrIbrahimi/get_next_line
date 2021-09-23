@@ -12,7 +12,7 @@ int main()
 		s = get_next_line(fd);
 		*s ? printf("l: %s", s) : printf("l: (null)\n");
 	}
-	*s ? printf("l: %s", s) : printf("l: (null)\n");
-	system("leaks -q a.out");
+	//*s ? printf("l: %s", s) : printf("l: (null)\n");
+	//system("leaks -q a.out");
 	printf("FINISH");
 }

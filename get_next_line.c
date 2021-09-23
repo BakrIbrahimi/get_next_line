@@ -6,7 +6,7 @@
 /*   By: dpoveda- <me@izenynn.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 11:50:38 by dpoveda-          #+#    #+#             */
-/*   Updated: 2021/09/22 20:01:10 by dpoveda-         ###   ########.fr       */
+/*   Updated: 2021/09/23 11:17:02 by dpoveda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,19 @@ static char	*return_next_line(char **s)
 		free(*s);
 		*s = tmp;
 		if (!**s)
-			free(*s);
+			free(*s); // TODO: ESTE FREE FALLA, HACE FREE DE COSAS QUE NO EXISTEN A VECES
 	}
 	else
 	{
 		out = ft_strdup(*s);
-		free(*s); // esto da error al intentar hacer free de algo que no esta alocado...?
+		if (!**s)
+			free(*s);
 	}
 	return (out);
 }
 
 static char	*check_and_return(char **s, ssize_t n)
 {
-	if (s || n)
-		;
 	if (!*s)
 		return (NULL);
 	if (n <= 0 && !*s) // necesario
