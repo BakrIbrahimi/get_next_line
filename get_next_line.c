@@ -6,14 +6,11 @@
 /*   By: dpoveda- <me@izenynn.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 11:50:38 by dpoveda-          #+#    #+#             */
-/*   Updated: 2021/09/23 11:17:02 by dpoveda-         ###   ########.fr       */
+/*   Updated: 2021/09/23 17:43:52 by dpoveda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-
-// TODO: funcion que haga trim en el /n
 
 static char	*return_next_line(char **s)
 {
@@ -22,7 +19,8 @@ static char	*return_next_line(char **s)
 	size_t	len;
 
 	len = 0;
-	while ((*s)[len] != '\n' && !(*s)[len])
+	out = NULL;
+	while ((*s)[len] != '\n' && (*s)[len])
 		len++;
 	if ((*s)[len] == '\n')
 	{
@@ -31,36 +29,28 @@ static char	*return_next_line(char **s)
 		free(*s);
 		*s = tmp;
 		if (!**s)
-			free(*s); // TODO: ESTE FREE FALLA, HACE FREE DE COSAS QUE NO EXISTEN A VECES
+		{
+			free(*s);
+			*s = NULL;
+		}
 	}
-	else
+	else ///if (!(*s)[len])
 	{
 		out = ft_strdup(*s);
-		if (!**s)
-			free(*s);
+		free(*s);
+		*s = NULL;
+		//if (!**s)
+			//free(*s);
 	}
 	return (out);
-}
-
-static char	*check_and_return(char **s, ssize_t n)
-{
-	if (!*s)
-		return (NULL);
-	if (n <= 0 && !*s) // necesario
-	{
-		free(*s);
-		return (NULL);
-	}
-	return(return_next_line(s));
 }
 
 char	*get_next_line(int fd)
 {
 	char		*tmp;
 	char		*buf;
-	static char	*s;
+	static char	*s = NULL;
 	ssize_t		n;
-
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -72,17 +62,21 @@ char	*get_next_line(int fd)
 	{
 		buf[n] = '\0';
 		if (!s)
-			s = ft_strdup(buf);
-		else
-		{
-			tmp = s;
-			s = ft_strjoin(tmp, buf);
-			free(tmp);
-		}
+			s = ft_strdup("");
+		tmp = ft_strjoin(s, buf);
+		free(s);
+		s = tmp;
 		if (ft_strchr(buf, '\n'))
 			break ;
 		n = read(fd, buf, BUFFER_SIZE);
 	}
 	free(buf);
-	return (check_and_return(&s, n));
+	if (n < 0)
+		return (NULL);
+	if (!n && (!s || !*s))
+		return (NULL);
+	//if (*s)
+	//	return (return_next_line(&s));
+	//return (NULL);
+	return (return_next_line(&s));
 }
