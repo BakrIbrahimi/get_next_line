@@ -6,7 +6,7 @@
 /*   By: dpoveda- <me@izenynn.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 11:50:38 by dpoveda-          #+#    #+#             */
-/*   Updated: 2021/09/23 17:43:52 by dpoveda-         ###   ########.fr       */
+/*   Updated: 2021/09/23 18:44:09 by dpoveda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,21 @@ static char	*return_next_line(char **s)
 			free(*s);
 			*s = NULL;
 		}
+		return (out);
 	}
-	else ///if (!(*s)[len])
-	{
-		out = ft_strdup(*s);
-		free(*s);
-		*s = NULL;
-		//if (!**s)
-			//free(*s);
-	}
+	out = ft_strdup(*s);
+	free(*s);
+	*s = NULL;
 	return (out);
+}
+
+static char	*check_and_return(char **s, ssize_t n)
+{
+	if (n < 0)
+		return (NULL);
+	if (!n && (!s || !*s))
+		return (NULL);
+	return (return_next_line(s));
 }
 
 char	*get_next_line(int fd)
@@ -71,12 +76,5 @@ char	*get_next_line(int fd)
 		n = read(fd, buf, BUFFER_SIZE);
 	}
 	free(buf);
-	if (n < 0)
-		return (NULL);
-	if (!n && (!s || !*s))
-		return (NULL);
-	//if (*s)
-	//	return (return_next_line(&s));
-	//return (NULL);
-	return (return_next_line(&s));
+	return (check_and_return(&s, n));
 }

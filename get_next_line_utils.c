@@ -6,7 +6,7 @@
 /*   By: dpoveda- <me@izenynn.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 12:33:48 by dpoveda-          #+#    #+#             */
-/*   Updated: 2021/09/22 13:45:29 by dpoveda-         ###   ########.fr       */
+/*   Updated: 2021/09/23 19:57:56 by dpoveda-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,43 +35,26 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strcpy(char *dst, const char *src)
-{
-	char	*save;
-
-	save = dst;
-	while (*src)
-		*dst++ = *src++;
-	*dst = '\0';
-	return (save);
-}
-
 char	*ft_strdup(const char *s1)
 {
 	char	*cpy;
+	char	*save;
 	size_t	len;
 
 	len = ft_strlen(s1);
 	cpy = malloc(len + 1);
 	if (!cpy)
 		return (NULL);
-	return (ft_strcpy(cpy, s1));
-}
-
-char	*ft_strcat(char *s1, const char *s2)
-{
-	char	*save;
-
-	save = s1;
-	s1 += ft_strlen(s1);
-	while (*s2)
-		*s1++ = *s2++;
-	*s1 = '\0';
+	save = cpy;
+	while (*s1)
+		*cpy++ = *s1++;
+	*cpy = '\0';
 	return (save);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
+	char	*save;
 	char	*out;
 
 	if (!s1 || !s2)
@@ -79,28 +62,19 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	out = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!out)
 		return (NULL);
-	ft_strcpy(out, s1);
-	ft_strcat(out, s2);
-	return (out);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	char	*save;
-
-	if (!dstsize)
-		return (ft_strlen(src));
-	save = (char *)src;
-	dstsize--;
-	while (*src && dstsize--)
-		*dst++ = *src++;
-	*dst = '\0';
-	return (ft_strlen(save));
+	save = out;
+	while (*s1)
+		*out++ = *s1++;
+	while (*s2)
+		*out++ = *s2++;
+	*out = '\0';
+	return (save);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	out_len;
+	char	*save;
 	char	*out;
 
 	if (!s)
@@ -113,6 +87,10 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	out = malloc(len + 1);
 	if (!out)
 		return (NULL);
-	ft_strlcpy(out, s + start, len + 1);
-	return (out);
+	save = out;
+	s += start;
+	while (*s && len--)
+		*out++ = *s++;
+	*out = '\0';
+	return (save);
 }
