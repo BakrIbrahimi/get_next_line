@@ -2,4 +2,8 @@
 
 ## Info
 
-The aim of this project is to create a function that return a line ended by a new line ('\n') read in a file descriptor
+The aim of this project is to create a function that return a line ended by a new line ('\n') read in a file descriptor.
+
+- Status: finished
+- Result: 125%
+- Observations: (null)
