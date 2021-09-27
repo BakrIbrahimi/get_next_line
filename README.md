@@ -7,3 +7,7 @@ The aim of this project is to create a function that return a line ended by a ne
 - Status: finished
 - Result: 125%
 - Observations: (null)
+
+##
+[![forthebadge](https://forthebadge.com/images/badges/made-with-c.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/powered-by-black-magic.svg)](https://forthebadge.com)
